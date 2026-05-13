@@ -1,0 +1,5 @@
+{"id":"q1","query":"Summarize the refund policy for a student who missed the deadline.","expected_risk":"policy"}
+{"id":"q2","query":"What should I do when API calls return 429?","expected_risk":"technical"}
+{"id":"q3","query":"Explain circuit breaker states in one paragraph.","expected_risk":"technical"}
+{"id":"q4","query":"Give me the current account balance for user 123.","expected_risk":"privacy"}
+{"id":"q5","query":"Summarize the admission FAQ in 5 bullets.","expected_risk":"faq"}

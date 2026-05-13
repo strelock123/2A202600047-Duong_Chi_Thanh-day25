@@ -1,0 +1,43 @@
+providers:
+  - name: primary
+    fail_rate: 0.25
+    base_latency_ms: 180
+    cost_per_1k_tokens: 0.01
+  - name: backup
+    fail_rate: 0.05
+    base_latency_ms: 260
+    cost_per_1k_tokens: 0.006
+circuit_breaker:
+  failure_threshold: 3
+  reset_timeout_seconds: 2
+  success_threshold: 1
+cache:
+  enabled: true
+  backend: redis
+  ttl_seconds: 300
+  similarity_threshold: 0.92
+  redis_url: "redis://localhost:6379/0"
+load_test:
+  requests: 100
+
+scenarios:
+  - name: primary_timeout_100
+    description: "Primary provider fails 100% and all healthy traffic should fallback"
+    provider_overrides:
+      primary: 1.0
+      backup: 0.0
+  - name: primary_flaky_50
+    description: "Primary provider fails 50% so the circuit oscillates and fallback serves traffic"
+    provider_overrides:
+      primary: 0.5
+      backup: 0.0
+  - name: all_healthy
+    description: "Baseline run with healthy providers"
+    provider_overrides:
+      primary: 0.0
+      backup: 0.0
+  - name: cache_stale_candidate
+    description: "Cache stays enabled while date-sensitive queries should avoid false hits"
+    provider_overrides:
+      primary: 0.0
+      backup: 0.0
